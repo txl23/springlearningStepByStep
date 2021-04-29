@@ -1,0 +1,13 @@
+server:
+  port: 9090
+  session.timeout: 60000
+ 
+
+logging:
+  level:
+    root: info
+    com.yc: info
+    org.springframework: error
+  file:
+    path: ./logs
+    name: ycsss.log

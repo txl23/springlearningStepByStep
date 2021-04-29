@@ -1,0 +1,2 @@
+对业务层StudentBizImpl增加一些功能，而不修改StudenBiz原来的代码。
+解决方案：aop

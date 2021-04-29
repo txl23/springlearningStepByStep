@@ -198,7 +198,7 @@ public class MyAnnotationConfigApplicationContext implements MyApplicationContex
         for (Method m:ms){
             if (m.isAnnotationPresent(MyBean.class)){
                 Object o=m.invoke(obj);
-            handlePostConstruct(o,o.getClass());
+              handlePostConstruct(o,o.getClass());
                 beanMap.put(m.getName(),o);
             }
         }

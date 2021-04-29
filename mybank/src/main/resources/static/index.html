@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>银行</title>
+    <style type="text/css">
+        body {
+            background-color: aliceblue;
+        }
+
+        div {
+            border: black;
+            padding: 150px;
+            align-content: center;
+        }
+
+        div.btn {
+
+        }
+    </style>
+</head>
+<body>
+<div id="app" align="center">
+    <form action="" method="post">
+        <h2>银行业务</h2>
+        操作账号：<input type="text" name="accountid" v-model="accountid"/><br/>
+        操作金额：<input type="text" name="money" v-model="money"/><br/>
+        转入账户：<input type="text" name="inAccountId" v-model="inAccountId"/><br/>
+        <input type="button" value="开户" class="btn" @click="openAccounts()">
+        <input type="button" value="存款" class="btn" @click="deposit()"><br/>
+        <input type="button" value="取款" class="btn" @click="withdraw()">
+        <input type="button" value="转账" class="btn" @click="transfer()">
+        <input type="button" value="查询" class="btn" @click="query()">
+        <div id="result" v-html="result"></div>
+    </form>
+
+</div>
+
+
+<script src="js/vue.js"></script>
+<script src="js/axios.js"></script>
+<script>
+    let vm = new Vue({
+        el: '#app',
+        data: {
+            accountid: "",
+            money: "",
+            inAccountId: "",
+            result: ""
+
+        },
+
+        methods: {
+            openAccounts: function () {
+                var params = new URLSearchParams();
+                params.append("money", this.money);
+                axios.get('/mybank/openAccounts', params).then(Response => {
+                    if (Response.data.code == 1) {
+                        this.result = "新开账户：" + Response.data.data.accountId + "余额为" + Response.data.data.balance;
+                    } else {
+                        this.result = Response.data.msg;
+                    }
+                }).catch(function (error) {
+                    this.result = error;
+
+                })
+            },
+
+            deposit: function () {
+                var params = new URLSearchParams();
+                params.append("accountid", this.accountid);
+                params.append("money", this.money);
+
+                axios.post('/mybank/deposit', params).then(Response => {
+                    if (Response.data.code == 1) {
+                        this.result = "存入账户：" + Response.data.data.accountId + "余额为" + Response.data.data.balance;
+                    } else {
+                        this.result = Response.data.msg;
+                    }
+                }).catch(function (error) {
+                    this.result = error;
+
+                })
+            },
+            withdraw:function () {
+                var params=new URLSearchParams();
+                params.append("accountid", this.accountid);
+                params.append("money", this.money);
+
+                axios.post('/mybank/withdraw', params).then(Response => {
+                    if (Response.data.code == 1) {
+                        this.result = "取出账户：" + Response.data.data.accountId + "余额为" + Response.data.data.balance;
+                    } else {
+                        this.result = Response.data.msg;
+                    }
+                }).catch(function (error) {
+                    this.result = error;
+
+                })
+            },
+
+            transfer:function () {
+                var params=new URLSearchParams();
+                params.append("accountid", this.accountid);
+                params.append("money", this.money);
+                params.append("inAccountId",this.inAccountId);
+                axios.post('/mybank/transfer', params).then(Response => {
+                    if (Response.data.code == 1) {
+                        this.result = "转出账户：" + Response.data.data.accountId + "余额为" + Response.data.data.balance;
+                    } else {
+                        this.result = Response.data.msg;
+                    }
+                }).catch(function (error) {
+                    this.result = error;
+
+                })
+            },
+            query:function () {
+                var params=new URLSearchParams();
+                params.append("accountid", this.accountid);
+                params.append("money", this.money);
+                axios.post('/mybank/query', params).then(Response => {
+                    if (Response.data.code == 1) {
+                        this.result = "账户：" + Response.data.data.accountId + "余额" + Response.data.data.balance;
+                    } else {
+                        this.result = Response.data.msg;
+                    }
+                }).catch(function (error) {
+                    this.result = error;
+
+                })
+            }
+
+        }
+    })
+
+</script>
+</body>
+</html>
